@@ -1,0 +1,14 @@
+{
+  "name": "cypress-orangehrm-admin-user-e2e",
+  "version": "1.0.0",
+  "description": "Cypress E2E UI testing project untuk OrangeHRM Demo (Login, Admin menu, Add Admin User, Dashboard validation, screenshots)",
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:run:chrome": "cypress run --browser chrome",
+    "cy:run:headed": "cypress run --headed"
+  },
+  "devDependencies": {
+    "cypress": "^13.13.0"
+  }
+}
