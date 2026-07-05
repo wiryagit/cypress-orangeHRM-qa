@@ -3,12 +3,6 @@
 Project automasi pengujian **UI E2E** menggunakan Cypress (JavaScript) untuk situs demo
 [OrangeHRM](https://opensource-demo.orangehrmlive.com/).
 
-Project ini adalah hasil modifikasi dari template Cypress sebelumnya
-(`cypress-gorest-api-testing`, testing API GoRest) yang diubah total menjadi
-UI testing OrangeHRM sesuai requirement task baru. Koneksi Git ke repository
-lama sudah dilepas — silakan hubungkan ke repository GitHub baru (lihat bagian
-**Setup Git & GitHub** di bawah).
-
 ## Fitur yang Diuji
 
 1. **Login** — akses URL demo, login dengan kredensial `Admin` / `admin123`,
@@ -83,9 +77,7 @@ cypress/screenshots/admin-user-management.cy.js/08-new-user-found-in-table.png
 
 ## Setup Git & GitHub (Repository Baru)
 
-Folder ini sudah diberikan sebagai **project bersih tanpa riwayat Git** (tidak
-terhubung ke repo lama `cypress-gorest-qa`). Untuk menghubungkannya ke
-repository GitHub baru:
+Untuk menghubungkan project ke repository GitHub baru:
 
 1. Buat repository baru di GitHub (kosong, tanpa README/gitignore), misal:
    `cypress-orangehrm-admin-user-e2e`.
