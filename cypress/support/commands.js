@@ -66,22 +66,40 @@ Cypress.Commands.add("selectDropdownByLabel", (labelText, optionText) => {
 });
 
 /**
- * Helper: isi Employee Name (autocomplete) dan pilih saran pertama
- * yang muncul dari hasil pencarian karyawan.
+ * Helper: isi Employee Name (autocomplete) dan pilih saran yang benar-benar
+ * cocok dengan nama yang diketik, setelah API pencarian selesai.
+ *
+ * Catatan penting: dropdown autocomplete OrangeHRM bisa sempat menampilkan
+ * status sementara (mis. placeholder pencarian) sebelum hasil API final
+ * muncul. Jika opsi diklik terlalu cepat, field bisa tetap terisi teks tapi
+ * TIDAK ter-set sebagai pilihan valid (invalid), meskipun secara visual
+ * terlihat sudah terisi. Maka wajib menunggu response API selesai (cy.wait)
+ * sebelum mengklik opsi yang teksnya benar-benar cocok.
  */
 Cypress.Commands.add("fillEmployeeNameAutocomplete", (employeeName) => {
+  cy.intercept("GET", "**/api/v2/pim/employees**").as("searchEmployees");
+
   cy.contains(".oxd-label", "Employee Name")
     .parents(".oxd-input-group")
     .find("input")
+    .clear()
     .type(employeeName, { delay: 50 });
 
-  // Tunggu dropdown saran muncul lalu pilih opsi pertama.
-  // Catatan: OrangeHRM merender opsi sebagai <div class="oxd-autocomplete-option">,
-  // BUKAN <li>, sehingga selector di bawah menyesuaikan struktur tersebut.
+  // Tunggu API pencarian karyawan selesai sebelum berinteraksi dengan dropdown
+  cy.wait("@searchEmployees");
+
   cy.get(".oxd-autocomplete-dropdown", { timeout: 10000 })
     .should("be.visible")
     .find(".oxd-autocomplete-option")
-    .first()
+    .contains(employeeName)
     .should("be.visible")
     .click();
+
+  // Pastikan input benar-benar ter-set (bukan status invalid) setelah dipilih
+  cy.contains(".oxd-label", "Employee Name")
+    .parents(".oxd-input-group")
+    .find("input")
+    .should("have.value")
+    .invoke("val")
+    .should("include", employeeName);
 });
