@@ -95,7 +95,6 @@ Cypress.Commands.add("fillEmployeeNameAutocomplete", (employeeName) => {
     .should("be.visible")
     .click();
 
-  // Pastikan input benar-benar ter-set (bukan status invalid) setelah dipilih
   cy.contains(".oxd-label", "Employee Name")
     .parents(".oxd-input-group")
     .find("input")    

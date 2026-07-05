@@ -1,4 +1,3 @@
-// Import custom commands
 import "./commands";
 
 // Mencegah test gagal hanya karena error JS/uncaught exception yang tidak

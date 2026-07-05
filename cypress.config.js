@@ -21,7 +21,7 @@ module.exports = defineConfig({
     },
   },
   env: {
-    // Kredensial default sesuai requirement task.
+    // Kredensial default sesuai requirement
     // Untuk data sensitif di project nyata, sebaiknya pindahkan ke cypress.env.json (sudah di-gitignore)
     adminUsername: "Admin",
     adminPassword: "admin123",

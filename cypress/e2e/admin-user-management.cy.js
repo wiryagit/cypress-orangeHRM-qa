@@ -1,9 +1,6 @@
 /// <reference types="cypress" />
 
-// ==========================================================================
 // E2E Test: OrangeHRM - Login, Menu Admin, Tambah Admin User, Validasi Dashboard
-// ==========================================================================
-//
 // Flow pengujian:
 // 1. Login menggunakan kredensial Admin
 // 2. Verifikasi redirect ke /dashboard + screenshot
@@ -23,7 +20,6 @@ describe("OrangeHRM - Admin User Management E2E", () => {
   });
 
   beforeEach(() => {
-    // Login sekali (di-cache oleh cy.session), lalu pastikan mulai dari dashboard
     cy.loginAsAdmin();
     cy.visit("/web/index.php/dashboard/index");
   });
@@ -31,7 +27,6 @@ describe("OrangeHRM - Admin User Management E2E", () => {
   it("1. Login - harus berhasil redirect ke Dashboard", () => {
     cy.url().should("include", "/dashboard");
 
-    // Validasi elemen khas halaman Dashboard benar-benar tampil
     cy.get(".oxd-topbar-header-breadcrumb h6").should(
       "contain.text",
       "Dashboard"
@@ -44,20 +39,12 @@ describe("OrangeHRM - Admin User Management E2E", () => {
   });
 
   it("2. Dashboard - widget utama harus tampil dengan benar", () => {
-    // Catatan: widget seperti "Time at Work" / "My Actions" hanya muncul jika
-    // akun login terhubung ke data karyawan pribadi (leave/attendance), yang
-    // tidak selalu berlaku untuk akun Admin di demo. Maka validasi diarahkan
-    // ke widget & struktur layout yang SELALU tampil untuk semua akun.
     cy.get(".oxd-layout-context").should("be.visible");
     cy.get(".orangehrm-dashboard-grid").should("exist");
 
-    // Minimal harus ada satu atau lebih grid item widget yang ter-render
-    // (.oxd-grid-item adalah class generik OXD yang membungkus setiap widget,
-    // lebih stabil daripada mengandalkan class khusus per-widget)
     cy.get(".orangehrm-dashboard-grid .oxd-grid-item", { timeout: 10000 })
       .should("have.length.greaterThan", 0);
 
-    // "Quick Launch" adalah widget yang selalu tampil untuk semua role
     cy.contains("Quick Launch").should("be.visible");
 
     cy.screenshot("02-dashboard-widgets-validated");
@@ -84,14 +71,14 @@ describe("OrangeHRM - Admin User Management E2E", () => {
     cy.contains("h6", "Add User").should("be.visible");
     cy.screenshot("04-add-user-form-empty");
 
-    // --- Validasi: submit form kosong harus memunculkan pesan required ---
+    // Validasi: submit form kosong harus memunculkan pesan required
     cy.contains("button", "Save").click();
     cy.get(".oxd-input-group__message")
       .should("have.length.greaterThan", 0)
       .and("contain.text", "Required");
     cy.screenshot("05-add-user-form-validation-required");
 
-    // --- Isi form dengan data valid ---
+    // Isi form
     cy.selectDropdownByLabel("User Role", userData.userRole);
     cy.fillEmployeeNameAutocomplete(userData.employeeName);
     cy.selectDropdownByLabel("Status", userData.status);
@@ -112,7 +99,6 @@ describe("OrangeHRM - Admin User Management E2E", () => {
       expect(visibleErrors.length, "jumlah pesan error yang terlihat").to.eq(0);
     });
 
-    // Klik Save
     cy.contains("button", "Save").click();
 
     // Setelah save, harus kembali ke halaman System Users
@@ -131,7 +117,6 @@ describe("OrangeHRM - Admin User Management E2E", () => {
 
     cy.contains("button", "Search").click();
 
-    // Tunggu tabel selesai loading, lalu validasi hasil pencarian
     cy.get(".oxd-table-body", { timeout: 10000 }).should("be.visible");
     cy.get(".oxd-table-body .oxd-table-row").should("have.length", 1);
     cy.get(".oxd-table-body .oxd-table-row")
