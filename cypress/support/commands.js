@@ -98,8 +98,7 @@ Cypress.Commands.add("fillEmployeeNameAutocomplete", (employeeName) => {
   // Pastikan input benar-benar ter-set (bukan status invalid) setelah dipilih
   cy.contains(".oxd-label", "Employee Name")
     .parents(".oxd-input-group")
-    .find("input")
-    .should("have.value")
+    .find("input")    
     .invoke("val")
     .should("include", employeeName);
 });
