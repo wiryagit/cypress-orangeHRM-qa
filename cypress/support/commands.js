@@ -75,10 +75,13 @@ Cypress.Commands.add("fillEmployeeNameAutocomplete", (employeeName) => {
     .find("input")
     .type(employeeName, { delay: 50 });
 
-  // Tunggu dropdown saran muncul lalu pilih opsi pertama
+  // Tunggu dropdown saran muncul lalu pilih opsi pertama.
+  // Catatan: OrangeHRM merender opsi sebagai <div class="oxd-autocomplete-option">,
+  // BUKAN <li>, sehingga selector di bawah menyesuaikan struktur tersebut.
   cy.get(".oxd-autocomplete-dropdown", { timeout: 10000 })
     .should("be.visible")
-    .find("li")
+    .find(".oxd-autocomplete-option")
     .first()
+    .should("be.visible")
     .click();
 });
