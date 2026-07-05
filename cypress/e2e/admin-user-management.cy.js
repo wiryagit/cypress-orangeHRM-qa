@@ -101,8 +101,16 @@ describe("OrangeHRM - Admin User Management E2E", () => {
 
     cy.screenshot("06-add-user-form-filled");
 
-    // --- Validasi tambahan: pastikan tidak ada pesan error tersisa sebelum Save ---
-    cy.get(".oxd-input-field-error-message").should("not.exist");
+    // Validasi tambahan: pastikan tidak ada pesan error yang TERLIHAT sebelum Save.
+    // Catatan: OrangeHRM kadang tetap menyisakan elemen pesan error di DOM
+    // (hidden), sehingga pengecekan diarahkan ke visibilitas, bukan ke
+    // keberadaan elemen di DOM.
+    cy.get("body").then(($body) => {
+      const visibleErrors = $body
+        .find(".oxd-input-field-error-message")
+        .filter((_, el) => Cypress.dom.isVisible(el));
+      expect(visibleErrors.length, "jumlah pesan error yang terlihat").to.eq(0);
+    });
 
     // Klik Save
     cy.contains("button", "Save").click();
